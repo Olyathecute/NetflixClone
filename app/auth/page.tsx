@@ -1,10 +1,12 @@
 'use client'
 import { useCallback, useState } from 'react'
-import Input from '@/components/Input'
-import { authText, authPageType } from '../data'
-import { registerUser } from '../api/reg'
-import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
+import Input from '@/components/Input'
+import { registerUser } from '../api/reg'
+import { FcGoogle } from 'react-icons/fc'
+import { FaGithub } from 'react-icons/fa'
+import { authText, authPageType } from '../data'
 
 type Props = {}
 
@@ -12,7 +14,6 @@ function Auth({}: Props) {
   const router = useRouter()
 
   const [form, setForm] = useState({ email: '', name: '', password: '' })
-  console.log(form)
 
   const [variant, setVariant] = useState<authPageType>('login')
   const texts = authText[variant]
@@ -78,13 +79,28 @@ function Auth({}: Props) {
                 label='Password'
               />
             </div>
+
             <button
               onClick={variant === 'login' ? login : register}
               className='bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition'
             >
               {texts.button}
             </button>
-            <p className='text-neutral-500 mt-12'>
+            <div className='flex flex-row items-center justify-center gap-4 mt-8'>
+              <div
+                onClick={() => signIn('google', { callbackUrl: '/' })}
+                className='w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition'
+              >
+                <FcGoogle size={30} />
+              </div>
+              <div
+                onClick={() => signIn('github', { callbackUrl: '/' })}
+                className='w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition'
+              >
+                <FaGithub size={30} />
+              </div>
+            </div>
+            <p className='text-neutral-500 mt-8'>
               {texts.message}
               <span onClick={toggleVariant} className='text-white ml-1 hover:underline cursor-pointer'>
                 {texts.link}
