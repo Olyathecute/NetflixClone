@@ -1,6 +1,5 @@
 'use server'
 import bcrypt from 'bcrypt'
-import { NextApiRequest, NextApiResponse } from 'next'
 import prismadb from '@/lib/prismadb'
 
 export async function registerUser(email: string, name: string, password: string) {

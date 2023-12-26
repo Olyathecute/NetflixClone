@@ -34,11 +34,15 @@ const handler = NextAuth({
           throw new Error('Email and password required')
         }
 
+        console.log('credentials', credentials)
+
         const user = await prismadb.user.findUnique({
           where: {
             email: credentials.email,
           },
         })
+
+        console.log('user', user)
 
         if (!user || !user.hashedPassword) {
           throw new Error('Email does not exist')
@@ -63,10 +67,13 @@ const handler = NextAuth({
   session: {
     strategy: 'jwt',
   },
-  jwt: {
-    secret: process.env.NEXTAUTH_JWT_SECRET,
+  callbacks: {
+    async jwt(fgh) {
+      // Persist the OAuth access_token and or the user id to the token right after signin
+      console.log(fgh)
+      return fgh.token
+    },
   },
-  secret: process.env.NEXTAUTH_SECRET,
 })
 
 export { handler as GET, handler as POST }
